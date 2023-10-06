@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nuggets of Knowledge</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="shortcut icon" href="pics/png 7.png">
+</head>
+<body>
+<div class="container">
+    <header class="header">
+        <div class="logo">
+            <img src="pics/png 7.png" 
+        alt="Today I Learned Logo"/>
+        <h1>Nuggets of Knowledge</h1>
+        </div>
+        
+        <button class="btn btn-share btn-open">Share a fact</button>
+    </header>
+
+    <form class="fact-form hidden" >
+        <input type="text" placeholder="Share a fact that you learned mate">
+        <span>200</span>
+        <input type="text" placeholder="Trustworthy source">
+        <select>
+            <option value="">Choose Category</option> <!--We want people not be able to choose it so no value-->
+            <option value="technology">Technology</option>
+            <option value="science">Science</option>
+            <option value="finance">Finance</option>
+        </select>
+        <button class="btn">Post</button>
+    </form>
+
+    <main class="main">
+
+        <aside>  <!-- Sidebar-->
+            <ul>
+                <li><button class="btn btn-all">All</button></li>
+                <li><button class="btn btn-category">Technology</button></li>
+                <li><button class="btn btn-category">Science</button></li>
+            </ul>
+        </aside>
+
+        <section>  <!-- Main-Section-->
+            <ul class="facts-list">
+                <li class="fact">
+                    <p>
+                        React is being develped by Meta (formerly Facebook).
+                        <a class="source"
+                        href="https://opensource.fb.com/" target="_blank">(Source)</a> 
+                    </p>
+                    <span class="tag">#technology</span>
+                    <div class="vote-buttons">
+                        <button>👍 <strong>24</strong></button>
+                        <button>🤯 <strong>9</strong></button>
+                        <button>⛔️ <strong>4</strong></button>
+                      </div>
+                </li>
+                <li class="fact">
+                    <p>
+                        Millenial dads spend 3 times as much time with their kids
+                        that their fathers spent with them. In 1992, 43% of fathers had never
+                        changed a diaper.Today the number is down to 3%.
+                        <a class="source" 
+                        href="https://www.mother.ly/parenting/millennial-dads-spend-more-time-with-their-kids"
+                        target="_blank">(Source)</a>
+                    </p>
+                    <span class="tag">#society</span> 
+                    <div class="vote-buttons">
+                        <button>👍 <strong>11</strong></button>
+                        <button>🤯 <strong>2</strong></button>
+                        <button>⛔️ <strong>0</strong></button>
+                    </div>
+                </li>
+            </ul>
+        </section>
+    </main> 
+</div>
+<script src="script.js"></script>
+</body>
+</html>

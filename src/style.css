@@ -1,0 +1,266 @@
+@font-face {
+    font-family: BLKND;
+    src: url(fonts/BLKND-SANS.otf);
+  }
+@font-face {
+    font-family: GT;
+    src: url(fonts/GT-America-Mono-Black-Trial.otf);
+  }
+@font-face {
+    font-family: up;
+    src: url(fonts/upheavtt.ttf);
+}
+
+*{
+    
+    padding:0;
+    margin:0;
+    box-sizing: border-box;
+}
+body{
+    background-color:#be1e1e;
+}
+
+.hidden{
+    display: none !important; 
+}
+/* fact form appears after this hidden therefore that overrides this and display becomes flex */
+.container{
+    background-color: #FFF5E0;
+    border-radius: 70px;
+    width:100%;
+    height:100%;
+    margin: 0 auto;
+    padding:0px;
+}
+.header{
+    margin-bottom: 40px;
+    padding: 10px;
+    display: flex;
+    align-items:center ;  /* vertically*/
+    justify-content: space-between;  /* horizontally*/
+}
+
+.logo{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 30px;
+    margin-left:30px;
+
+}
+ul {
+    list-style: none;
+    
+    
+}
+
+.fact-form{
+    background-color: #be1e1e;
+    padding: 40px;
+    border-radius: 30px;
+    margin-bottom: 40px;
+    display: flex;
+    align-items: center;
+    gap:16px;
+    justify-content: center;
+}
+
+h1{
+    font-size: 42px;
+    text-transform: uppercase;
+    text-align: center;
+    font-family: BLKND;
+    color:#be1e1e;
+}
+
+.main{
+    display: grid;
+    grid-template-columns: 250px 1fr ; 
+    gap:40px;
+    margin-right: 20px;
+    margin-left: 20px;
+
+}
+@media(max-width:900px){
+    .main{
+        grid-template-columns: 1fr;
+    }
+}
+
+.logo img{
+    width: 72px;
+    height: 72px;
+}
+
+.fact{
+    font-size:20px;
+    line-height: 1.4;
+    font-family:up;
+    color:#162356;
+    background-color:#FF6969 ;
+    margin-bottom: 20px;
+    border-radius: 30px;
+    padding: 8px 24px; /* vertical horizontal*/
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    letter-spacing: -0.25px;
+    
+}
+
+
+
+.vote-buttons {
+    margin-left: auto;
+    display: flex;
+    flex-shrink: 0; 
+    gap: 8px;
+}
+
+.vote-buttons button{
+    border:#162356 solid;
+    background-color:aliceblue;
+    font-size: 14px;
+    padding: 5px;
+    padding-bottom: 8px;
+    border-radius: 30px;
+    color:#162356;
+    font-family: up;
+    letter-spacing: 1px;
+    cursor:pointer ;
+    transition:0.25s;
+    
+}
+.vote-buttons button:hover {
+    background-color: #162356;
+    color: #ffe627;
+    transform: scale(95%);
+    border:#ffe627 solid;
+}
+
+@media(max-width:1200px){/*for all the screen less than 1200px we
+    want the code below it to apply*/
+    .fact{
+        flex-direction: column;
+        align-items:flex-end;
+        gap: 12px;
+    }
+
+} 
+
+.tag{
+    
+    font-size: 14px;
+    background-color: #FFF5E0;
+    padding: 5px;
+    border-radius: 10px;
+    cursor:pointer;
+    transition: 0.2s;
+
+}
+.tag:hover{
+    transform: scale(95%);
+    background-color:aliceblue;
+}
+
+.source:link{
+    color:aliceblue;
+    text-decoration: none;
+    margin-left: 12px;
+    transition:0.4s;
+}
+.source:visited{
+    color:purple
+}
+.source:hover{
+    color:#ffe627
+}
+.source:active{
+    color:azure
+}
+
+.btn{
+    border:#162356 solid;
+    font-family: up;
+    line-height: 1;
+    font-size:24px;
+    padding:10px 0 10px;
+    background-color:#FFF5E0;
+    border-radius: 30px;
+    padding:6px 12px 8px;
+    margin-bottom:5px;
+    transition: 0.2s;
+    cursor:pointer;
+    color:#162356;
+}
+
+.btn:hover{
+    background-color: aliceblue;
+    
+    transform: scale(90%);
+}
+
+.btn-all,
+.btn-category{
+    margin-bottom: 20px;
+    width:100%;
+}
+
+.fact-form input,
+.fact-form select{
+    background-color: #FF6969;
+    padding:16px;
+    border:none;
+    border-radius:30px;
+    color:#162356;
+    font-family: up;
+    font-size: 20px;
+    
+}
+
+@media(max-width:1000px){
+    .fact-form{
+        flex-direction: column;
+        align-items: stretch;
+    }
+    fact-form input,
+.fact-form select{
+    width: auto;
+}
+}
+
+
+.fact-form select{
+    padding-bottom: 20px;
+}
+.fact-form span{
+    font-size: 30px;
+    font-family: up;
+    color: aliceblue;
+    margin-right: 20px;
+}
+/*psuedo element placeholder*/
+.fact-form input::placeholder{
+    color:aliceblue
+}
+
+.btn-share{
+    margin: 20px;
+    margin-right: 40px;
+    padding:16px;
+    font-size: 24px;
+}
+
+.fact-form input:first-child{
+    flex-grow:1; /* by default it is is 0 , but when it is 1 the element 
+    will take as much space as needed and grow*/
+}
+
+.message{
+    text-align: center;
+    text-transform: uppercase;
+    font-size: 24px;
+    font-family: up;
+    color: #162356;
+}
