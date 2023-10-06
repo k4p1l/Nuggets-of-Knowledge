@@ -47,83 +47,89 @@ const initialFacts = [
   },
 ];
 
-
 function App() {
   //define state variable
   const [showForm, setShowForm] = useState(false);
   const [facts, setFacts] = useState([]);
   const [isLoading, setisLoading] = useState(false);
   //when data get loaded we set the state to true and means data is loaded
-  
+
   useEffect(function () {
     async function getFacts() {
       setisLoading(true);
       const { data: facts, error } = await supabase
-      
-        .from('facts')
-        .select('*')
+
+        .from("facts")
+        .select("*")
         .order("votesInteresting", { ascending: false })
         .limit(1000);
-      
-      if (!error) setFacts(facts);//is there is no error then load the facts ,otherwise alert the user.error handling
+
+      if (!error) setFacts(facts);
+      //if there is no error then load the facts ,otherwise alert the user. Called as error handling.
       else alert("There was an problem getting the data");
       setisLoading(false);
     }
     getFacts();
-  },
-    []);  
+  }, []);
+
   // we want the data to get loaded only once when the website starts
   //and not when a state variable changes
   return (
     <>
       <div className="container">
-        <Header showForm={showForm} setShowForm={ setShowForm} />
-
-            {/* use state variable */}
-        {showForm ? <NewFactForm setFacts={setFacts} setShowForm={setShowForm} /> : null }        
+        <Header showForm={showForm} setShowForm={setShowForm} />{" "}
+        {/* use state variable */}
+        {showForm ? (
+          <NewFactForm setFacts={setFacts} setShowForm={setShowForm} />
+        ) : null}
         <main className="main">
-        <CategoryFilter/>
-        {isLoading?<Loader/>:<FactsList facts={facts} />}  
-        
-        
+          <CategoryFilter />
+          {isLoading ? <Loader /> : <FactsList facts={facts} />}
         </main>
-        </div>
-      
+      </div>
     </>
-  ); 
+  );
 }
+
+//--------------------------------------------App Finished---------------------------------------------//
 
 function Loader() {
-  return <p className="message">Loading just a sec mate...</p>
+  return <p className="message">Loading just a sec mate...</p>;
 }
 
-function Header({showForm, setShowForm}) {
-  return <header className="header">
-  <div className="logo">
-      <img src="pics/png 7.png" 
-  alt="Today I Learned Logo"/>
-  <h1>Nuggets of Knowledge</h1>
-  </div>
-                              {/*update state variable  */}
-    <button className="btn btn-share btn-open" onClick={() => setShowForm((show) => !show)}>
-      {showForm? 'Close':'Share a fact'}
-    </button>
-</header>
-
+function Header({ showForm, setShowForm }) {
+  return (
+    <header className="header">
+      <div className="logo">
+        <img src="pics/png 7.png" alt="Today I Learned Logo" />
+        <h1>Nuggets of Knowledge</h1>
+      </div>
+      {/*update state variable  */}
+      <button
+        className="btn btn-share btn-open"
+        onClick={() => setShowForm((show) => !show)}
+      >
+        {showForm ? "Close" : "Share a fact"}
+      </button>
+    </header>
+  );
 }
 
 function CategoryFilter() {
-  return <aside>
-    <ul>
-      <li><button className="btn btn-all">All</button></li>
-      {CATEGORIES.map((cat) => <li key={cat.name}>
-        <button className="btn btn-category">
-        { cat.name}
-      </button></li>)}
-    
-            
+  return (
+    <aside>
+      <ul>
+        <li>
+          <button className="btn btn-all">All</button>
+        </li>
+        {CATEGORIES.map((cat) => (
+          <li key={cat.name}>
+            <button className="btn btn-category">{cat.name}</button>
+          </li>
+        ))}
       </ul>
-  </aside>
+    </aside>
+  );
 }
 
 function isValidHttpUrl(string) {
@@ -131,110 +137,128 @@ function isValidHttpUrl(string) {
   try {
     url = new URL(string);
   } catch (_) {
-    return false;  
+    return false;
   }
 
   return url.protocol === "http:" || url.protocol === "https:";
 }
 
-
-function NewFactForm({setFacts,setShowForm}) {
+function NewFactForm({ setFacts, setShowForm }) {
   const [text, setText] = useState("");
   const [source, setSource] = useState("http://example.com");
   const [category, setCategory] = useState("");
   const textlength = text.length;
 
-async function handleSubmit(e) {
+  async function handleSubmit(e) {
     //1.Prevent the browser reload
-  e.preventDefault();
+    e.preventDefault();
     //2.Check if data is valid , if so create new fact.
-  if (text && isValidHttpUrl(source) && category && textlength <= 300)
-  {
-    
-    //  3.Create new fact object
-    //   const newFact = {
-    // id:Math.round(Math.random()*100000000),
-    // text,
-    // source,
-    // category,
-    // votesInteresting: 24,
-    // votesMindblowing: 9,
-    // votesFalse: 4,
-    // createdIn: new Date().getFullYear(),
-    //   };
-   
+    if (text && isValidHttpUrl(source) && category && textlength <= 300) {
+      //  3.Create new fact object
+      //   const newFact = {
+      // id:Math.round(Math.random()*100000000),
+      // text,
+      // source,
+      // category,
+      // votesInteresting: 24,
+      // votesMindblowing: 9,
+      // votesFalse: 4,
+      // createdIn: new Date().getFullYear(),
+      //   };
 
-    //3.Upload fact to supabase and receive the new fact object
+      //3.Upload fact to supabase and receive the new fact object
 
-    const { data: newFact, error } = await supabase.from("facts")
-      .insert([{ text, source, category }])
-      .select();
-    //by default all votes are 0 adn createdIn is automatically created by supabase
-    
-    //4.Add the new fact to the UI. aa the fact to state
-      setFacts((facts)=>[newFact[0],...facts])
-    //5.Reset the input field
-    setText("");
-    setCategory("");
-    setSource("http://example.com");
+      const { data: newFact, error } = await supabase
+        .from("facts")
+        .insert([{ text, source, category }])
+        .select();
+      //by default all votes are 0 and createdIn is automatically created by supabase
 
-    //6.Close the form
-    // setShowForm(false); 
+      //4.Add the new fact to the UI. aa the fact to state
+      setFacts((facts) => [newFact[0], ...facts]);
+      //5.Reset the input field
+      setText("");
+      setCategory("");
+      setSource("http://example.com");
+
+      //6.Close the form
+      setShowForm(false);
     }
-}
-  
+  }
+
   return (
-    <form className="fact-form" onSubmit={ handleSubmit}>
-    <input type="text" placeholder="Share a fact that you learned mate"
-      value={text}
-      onChange={(e) => setText(e.target.value)} 
-      // e is an event object. e.target is the current element
-    />
-    <span>{300 - textlength }</span>
-    <input value={source}
-      type="text" placeholder="Trustworthy source" onChange={(e)=> setSource(e.target.value)} />
-      <select value={category} onChange={(e) => setCategory(e.target.value)}
-      >
-          <option value="">Choose Category</option>
-          {/* We want people not be able to choose it so no value */}
-      {CATEGORIES.map((cat) => <option key={cat.name} value={cat.name}>
-        {cat.name}
-      </option>)}
-  </select>
-        
-        <button className="btn btn-large" >Post</button>
-      </form>
-  )
+    <form className="fact-form" onSubmit={handleSubmit}>
+      <input
+        type="text"
+        placeholder="Share a fact that you learned mate"
+        value={text}
+        onChange={(e) => setText(e.target.value)}
+        // e is an event object. e.target is the current element
+      />
+      <span>{300 - textlength}</span>
+      <input
+        value={source}
+        type="text"
+        placeholder="Trustworthy source"
+        onChange={(e) => setSource(e.target.value)}
+      />
+      <select value={category} onChange={(e) => setCategory(e.target.value)}>
+        <option value="">Choose Category</option>
+        {/* We want people not be able to choose it so no value */}
+        {CATEGORIES.map((cat) => (
+          <option key={cat.name} value={cat.name}>
+            {cat.name}
+          </option>
+        ))}
+      </select>
+
+      <button className="btn btn-large">Post</button>
+    </form>
+  );
 }
 
-
-function FactsList({facts}) {
+function FactsList({ facts }) {
   //temporary variable
-  
-  return <section>
-    <ul className="facts-list">{
-    facts.map((fact) => (
-      <Fact key={fact.id} fact={fact}/>
-    ))}
-  </ul>
-  </section>
-}
 
+  return (
+    <section>
+      <ul className="facts-list">
+        {facts.map((fact) => (
+          <Fact key={fact.id} fact={fact} />
+        ))}
+      </ul>
+    </section>
+  );
+}
 
 //props fact
-function Fact({fact}) {
-  return <li key={fact.id} className="fact">
-  <p>
-      {fact.text}
-      <a className="source"
-      href={fact.source} target="_blank" rel="noreferrer">(Source)</a> 
-  </p>
-    <span className="tag">#{ fact.category}</span>
-  <div className="vote-buttons">
-      <button>👍 <strong>{fact.votesInteresting}</strong></button>
-      <button>🤯 <strong>{fact.votesMindblowing }</strong></button>
-      <button>⛔️ <strong>{ fact.votesFalse}</strong></button>
-    </div>
-</li>
+function Fact({ fact }) {
+  return (
+    <li key={fact.id} className="fact">
+      <p>
+        {fact.text}
+        <a
+          className="source"
+          href={fact.source}
+          target="_blank"
+          rel="noreferrer"
+        >
+          (Source)
+        </a>
+      </p>
+      <span className="tag">#{fact.category}</span>
+      <div className="vote-buttons">
+        <button>
+          👍 <strong>{fact.votesInteresting}</strong>
+        </button>
+        <button>
+          🤯 <strong>{fact.votesMindblowing}</strong>
+        </button>
+        <button>
+          ⛔️ <strong>{fact.votesFalse}</strong>
+        </button>
+      </div>
+    </li>
+  );
 }
 export default App;
