@@ -13,6 +13,7 @@ const CATEGORIES = [
   { name: "news", color: "#8b5cf6" },
 ];
 
+// eslint-disable-next-line no-unused-vars
 const initialFacts = [
   {
     id: 1,
