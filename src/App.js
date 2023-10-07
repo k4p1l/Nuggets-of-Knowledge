@@ -52,15 +52,18 @@ function App() {
   const [showForm, setShowForm] = useState(false);
   const [facts, setFacts] = useState([]);
   const [isLoading, setisLoading] = useState(false);
+  const [currentCategory, setCurrentCategory] = useState("all");
   //when data get loaded we set the state to true and means data is loaded
 
   useEffect(function () {
     async function getFacts() {
       setisLoading(true);
-      const { data: facts, error } = await supabase
 
-        .from("facts")
-        .select("*")
+    let query =supabase.from("facts").select("*")  
+      if (currentCategory !== "all")
+      query=query.eq("category",currentCategory)
+    
+      const { data: facts, error } = await query
         .order("votesInteresting", { ascending: false })
         .limit(1000);
 
@@ -70,7 +73,8 @@ function App() {
       setisLoading(false);
     }
     getFacts();
-  }, []);
+  }, [currentCategory]);//dependency array.whenever this state changes it will reload the website with the data
+  //that we require acc to the category.entire function will get execute again.
 
   // we want the data to get loaded only once when the website starts
   //and not when a state variable changes
@@ -83,8 +87,8 @@ function App() {
           <NewFactForm setFacts={setFacts} setShowForm={setShowForm} />
         ) : null}
         <main className="main">
-          <CategoryFilter />
-          {isLoading ? <Loader /> : <FactsList facts={facts} />}
+          <CategoryFilter setCurrentCategory={setCurrentCategory} />
+          {isLoading ? <Loader /> : <FactsList facts={facts} setFacts={setFacts} />}
         </main>
       </div>
     </>
@@ -115,16 +119,16 @@ function Header({ showForm, setShowForm }) {
   );
 }
 
-function CategoryFilter() {
+function CategoryFilter({setCurrentCategory}) {
   return (
     <aside>
       <ul>
         <li>
-          <button className="btn btn-all">All</button>
+          <button className="btn btn-all" onClick={()=>setCurrentCategory("all")}>All</button>
         </li>
         {CATEGORIES.map((cat) => (
           <li key={cat.name}>
-            <button className="btn btn-category">{cat.name}</button>
+            <button className="btn btn-category" onClick={()=>setCurrentCategory(cat.name)}>{cat.name}</button>
           </li>
         ))}
       </ul>
@@ -175,7 +179,7 @@ function NewFactForm({ setFacts, setShowForm }) {
       //by default all votes are 0 and createdIn is automatically created by supabase
 
       //4.Add the new fact to the UI. aa the fact to state
-      setFacts((facts) => [newFact[0], ...facts]);
+      if(!error) setFacts((facts) => [newFact[0], ...facts]);
       //5.Reset the input field
       setText("");
       setCategory("");
@@ -217,14 +221,18 @@ function NewFactForm({ setFacts, setShowForm }) {
   );
 }
 
-function FactsList({ facts }) {
+function FactsList({ facts,setFacts }) {
   //temporary variable
+  if (facts.length === 0) {
+    return <p className="message">No facts for this category yet!
+    Create the first one 😎</p>
+  }
 
   return (
     <section>
       <ul className="facts-list">
         {facts.map((fact) => (
-          <Fact key={fact.id} fact={fact} />
+          <Fact key={fact.id} fact={fact} setFacts={ setFacts} />
         ))}
       </ul>
     </section>
@@ -232,7 +240,21 @@ function FactsList({ facts }) {
 }
 
 //props fact
-function Fact({ fact }) {
+function Fact({ fact, setFacts }) {
+  
+  const [isUpdating, setIsupdating] = useState(false);
+
+  async function handleVote(columnName) {
+    const { data: updatedfact, error } = await supabase.from('facts')
+      .update({ [columnName]: fact[columnName] + 1 }).eq("id", fact.id)
+      .select();
+    setIsupdating(true);
+    
+    if (!error)
+      setFacts((facts) =>
+        facts.map((f) => (f.id === fact.id ? updatedfact[0] : f)));
+    
+  }
   return (
     <li key={fact.id} className="fact">
       <p>
@@ -248,13 +270,16 @@ function Fact({ fact }) {
       </p>
       <span className="tag">#{fact.category}</span>
       <div className="vote-buttons">
-        <button>
+        <button onClick={() => handleVote("votesInteresting")}
+          disabled={isUpdating}>
           👍 <strong>{fact.votesInteresting}</strong>
         </button>
-        <button>
+        <button onClick={() => handleVote("votesMindblowing")}
+          disabled={isUpdating}>
           🤯 <strong>{fact.votesMindblowing}</strong>
         </button>
-        <button>
+        <button onClick={() => handleVote("votesFalse")}
+          disabled={isUpdating}>
           ⛔️ <strong>{fact.votesFalse}</strong>
         </button>
       </div>

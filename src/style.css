@@ -32,9 +32,10 @@ body{
     height:100%;
     margin: 0 auto;
     padding:0px;
+    position:fixed;
 }
 .header{
-    margin-bottom: 40px;
+    margin-bottom: 5px;
     padding: 10px;
     display: flex;
     align-items:center ;  /* vertically*/
@@ -80,8 +81,20 @@ h1{
     gap:40px;
     margin-right: 20px;
     margin-left: 20px;
+    height:90vh;
+    padding: 40px;
 
 }
+
+section{
+    overflow: scroll;
+    padding:10px;
+}
+
+section::-webkit-scrollbar {
+    display: none;
+}
+
 @media(max-width:900px){
     .main{
         grid-template-columns: 1fr;
@@ -137,6 +150,13 @@ h1{
     color: #ffe627;
     transform: scale(95%);
     border:#ffe627 solid;
+}
+
+.vote-buttons button:disabled{
+    background-color:aliceblue;
+    color:#162356;
+    border:#162356 solid;
+    transform: scale(100%);
 }
 
 @media(max-width:1200px){/*for all the screen less than 1200px we
@@ -219,10 +239,20 @@ h1{
     
 }
 
-@media(max-width:1000px){
+@media(max-width:900px){
     .fact-form{
         flex-direction: column;
         align-items: stretch;
+        
+    }
+    aside{
+        overflow: scroll;
+        height: 15vh;
+    }
+    aside::-webkit-scrollbar {
+        display: none;}
+    .main{
+        gap: 10px;
     }
     fact-form input,
 .fact-form select{
@@ -264,3 +294,4 @@ h1{
     font-family: up;
     color: #162356;
 }
+
